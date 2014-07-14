@@ -11,7 +11,7 @@ class PickleMD5KeyGenerator(object):
     """
 
     def __init__(self, protocol=-1):
-        self._protocol = -1
+        self._protocol = protocol
 
     def __call__(self, args, kwargs):
         pickled_args = pickle.dumps((args, sorted(kwargs.iteritems())),

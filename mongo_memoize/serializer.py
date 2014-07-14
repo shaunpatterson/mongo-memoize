@@ -24,7 +24,7 @@ class PickleSerializer(object):
     :param int protocol: Pickle protocol version.
     """
     def __init__(self, protocol=-1):
-        self._protocol = -1
+        self._protocol = protocol
 
     def serialize(self, obj):
         return base64.b64encode(pickle.dumps(obj, protocol=self._protocol))
