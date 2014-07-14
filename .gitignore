@@ -4,3 +4,4 @@ dist
 *.pyc
 .tox
 *.sublime-*
+docs/_build
