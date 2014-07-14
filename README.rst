@@ -7,7 +7,7 @@ mongo-memoize
 .. image:: https://travis-ci.org/ikuyamada/mongo-memoize.png?branch=master
     :target: https://travis-ci.org/ikuyamada/mongo-memoize
 
-A Python decorator library for memoizing functions instantly.
+A Python decorator library for instantly caching function results in MongoDB.
 
 Basic Usage
 -----------
