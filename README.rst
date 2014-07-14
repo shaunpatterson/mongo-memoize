@@ -7,6 +7,7 @@ Basic Usage
 -----------
 
 .. code-block:: python
+
     from mongo_memoize import memoize
 
     @memoize()
