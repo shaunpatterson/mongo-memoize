@@ -7,8 +7,9 @@ import cPickle as pickle
 class NoopSerializer(object):
     """Serializer that does nothing.
 
-    NOTE: It is required that the result of the function can be stored
-    directly in MongoDB if you use this serializer.
+    .. note::
+        It is required that the result of the function can be stored
+        directly in MongoDB when you use this serializer.
     """
 
     def serialize(self, obj):

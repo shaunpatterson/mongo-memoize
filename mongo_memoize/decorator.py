@@ -10,18 +10,19 @@ from serializer import PickleSerializer
 def memoize(
     db_name='mongo_memoize', host='localhost', port=27017, collection_name=None,
     prefix='memoize_', capped=False, capped_size=100000000, capped_max=None,
-    connection_options={}, key_generator=PickleMD5KeyGenerator(), serializer=PickleSerializer()
+    connection_options={}, key_generator=None, serializer=None
 ):
-    """A decorator that memoizes results of the function in MongoDB.
+    """A decorator that caches results of the function in MongoDB.
 
     Usage:
-        from mongo_memoize import memoize
 
-        @memoize()
-        def some_function():
-            pass
+        >>> from mongo_memoize import memoize
+        >>> @memoize()
+        ... def some_function():
+        ...     pass
+        ...
 
-    :param str db_name: MongoDB Database name.
+    :param str db_name: MongoDB database name.
     :param str host: MongoDB host name.
     :param int port: MongoDB port.
     :param str collection_name: MongoDB collection name. If not specified, the
@@ -31,13 +32,20 @@ def memoize(
         only valid when the collection_name argument is not specified.
     :param bool capped: Whether to use the capped collection.
     :param int capped_size: The maximum size of the capped collection in bytes.
-    :param int capped_max: The maximum number of items of the capped collection.
-    :param dict connection_options: Additional parameters for MongoDB connection.
+    :param int capped_max: The maximum number of items in the capped collection.
+    :param dict connection_options: Additional parameters for establishing
+        MongoDB connection.
     :param key_generator: Key generator instance.
-        :class:`PickleMD5KeyGenerator <mongo_memoize.key_generator.PickleMD5KeyGenerator>` is used by default.
+        :class:`PickleMD5KeyGenerator <mongo_memoize.PickleMD5KeyGenerator>` is used by default.
     :param serializer: Serializer instance.
-        :class:`PickleSerializer <mongo_memoize.serializer.PickleKeySerializer>` is used by default.
+        :class:`PickleSerializer <mongo_memoize.PickleSerializer>` is used by default.
     """
+    if not serializer:
+        serializer  = PickleSerializer()
+
+    if not key_generator:
+        key_generator = PickleMD5KeyGenerator()
+
     def decorator(func):
         db_conn = pymongo.Connection(host, port, *connection_options)[db_name]
 
