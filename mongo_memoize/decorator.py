@@ -55,8 +55,15 @@ def memoize(
             col_name = '%s%s.%s' % (prefix, func.__module__, func.__name__)
 
         if capped:
-            db_conn.create_collection(col_name, capped=True, size=capped_size,
-                                      max=capped_max)
+            if col_name not in db_conn.collection_names():
+                assert capped_size > 0, 'The size of the capped collection is required.'
+
+                capped_args = {}
+                capped_args['size'] = capped_size
+                if capped_max:
+                    capped_args['max'] = capped_max
+
+                db_conn.create_collection(col_name, capped=True, **capped_args)
 
         cache_col = db_conn[col_name]
         cache_col.ensure_index('key', unique=True)
