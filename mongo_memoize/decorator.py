@@ -2,6 +2,7 @@
 
 import pymongo
 from functools import wraps
+import hashlib
 
 from key_generator import PickleMD5KeyGenerator
 from serializer import PickleSerializer
@@ -9,7 +10,7 @@ from serializer import PickleSerializer
 
 def memoize(
     db_name='mongo_memoize', host='localhost', port=27017, collection_name=None,
-    prefix='memoize_', capped=False, capped_size=100000000, capped_max=None,
+    prefix='memoize', capped=False, capped_size=100000000, capped_max=None,
     connection_options={}, key_generator=None, serializer=None
 ):
     """A decorator that caches results of the function in MongoDB.
@@ -41,7 +42,7 @@ def memoize(
         :class:`PickleSerializer <mongo_memoize.PickleSerializer>` is used by default.
     """
     if not serializer:
-        serializer  = PickleSerializer()
+        serializer = PickleSerializer()
 
     if not key_generator:
         key_generator = PickleMD5KeyGenerator()
@@ -52,7 +53,7 @@ def memoize(
         if collection_name:
             col_name = collection_name
         else:
-            col_name = '%s%s.%s' % (prefix, func.__module__, func.__name__)
+            col_name = '%s_%s_%s' % (prefix, func.__name__, hashlib.md5(func.__module__).hexdigest())
 
         if capped:
             if col_name not in db_conn.collection_names():
