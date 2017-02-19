@@ -4,8 +4,8 @@ import pymongo
 from functools import wraps
 import hashlib
 
-from key_generator import PickleMD5KeyGenerator
-from serializer import PickleSerializer
+from mongo_memoize.key_generator import PickleMD5KeyGenerator
+from mongo_memoize.serializer import PickleSerializer
 
 
 def memoize(
