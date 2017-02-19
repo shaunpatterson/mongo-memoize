@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import base64
-import cPickle as pickle
+import pickle as pickle
 
 
 class NoopSerializer(object):
