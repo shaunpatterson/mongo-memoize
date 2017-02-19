@@ -48,12 +48,12 @@ def memoize(
         key_generator = PickleMD5KeyGenerator()
 
     def decorator(func):
-        db_conn = pymongo.Connection(host, port, *connection_options)[db_name]
+        db_conn = pymongo.MongoClient(host=host, port=port, *connection_options)[db_name]
 
         if collection_name:
             col_name = collection_name
         else:
-            col_name = '%s_%s_%s' % (prefix, func.__name__, hashlib.md5(func.__module__).hexdigest())
+            col_name = '%s_%s_%s' % (prefix, func.__name__, hashlib.md5(func.__module__.encode('utf-8')).hexdigest())
 
         if capped:
             if col_name not in db_conn.collection_names():
